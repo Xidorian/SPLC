@@ -1,0 +1,640 @@
+<!--<script src="https://dce4c79b1732.ngrok.io/zuri/luminate/splc/dist/js/scripts.js"></script>-->
+
+<script>
+(function () {
+  'use strict';
+
+  var root = document;
+  var activeClass = 'is-active';
+
+  var initStickyHeader = function initStickyHeader() {
+    // Add the sticky class to the header when you reach its scroll position. Remove "sticky" when you leave the scroll position
+    var doSticky = function doSticky() {
+      if (window.pageYOffset > sticky) {
+        addClass(header, 'sticky');
+        addClass(brand, 'animated flipInY');
+      } else {
+        removeClass(header, 'sticky');
+        removeClass(brand, 'animated flipInY');
+      }
+    }; // When the user scrolls the page, execute myFunction
+
+
+    window.addEventListener('scroll', doSticky); // Get the header and logo
+
+    var header = document.getElementById('header');
+    var brand = document.getElementById('brand'); // Get the offset position of the navbar
+
+    var sticky = header.offsetTop;
+    sticky = 1;
+    doSticky();
+  }; // Get custom hero image and text and apply
+
+
+  var setHeroContent = function setHeroContent() {
+    var hero = document.querySelector('.fs-hero__image-container');
+
+    if (hero) {
+      // Replace default hero text
+      var heroText = document.getElementById('heroText');
+
+      if (typeof heroTitle === 'string') {
+        if (heroText) {
+          heroText.innerText = heroTitle;
+          activateEl(heroText);
+        } else {
+          activateEl(heroText);
+        }
+      } else {
+        activateEl(heroText);
+      } // Replace default hero image
+
+
+      if (typeof heroImage === 'string') {
+        var heroPicture = document.getElementById('heroPicture');
+        var heroAlt = document.getElementById('heroAlt');
+
+        if (heroPicture) {
+          var sources = getAll('source, img', heroPicture);
+
+          if (sources.length > 0) {
+            var cnt = 0;
+            sources.forEach(function (el) {
+              cnt++;
+
+              if (el.nodeName.toLowerCase() === 'source') {
+                el.setAttribute('srcset', heroImage);
+              } else if (el.nodeName.toLowerCase() === 'img') {
+                el.addEventListener('load', function () {
+                  activateEl(hero);
+                });
+                el.setAttribute('src', heroImage);
+
+                if (heroAlt) {
+                  el.setAttribute('alt', heroAlt);
+                }
+              }
+            });
+          }
+        }
+      } else {
+        activateEl(hero);
+      } // Copy hero title to main body for display on small screen
+
+
+      var mainBody = document.querySelector('#main > .container');
+
+      if (mainBody && heroText) {
+        var heroTextClone = heroText.cloneNode();
+        var theFirstChild = mainBody.firstChild;
+        heroTextClone.removeAttribute('id');
+        heroTextClone.innerText = heroText.innerText;
+        removeClass(heroTextClone, 'is-hidden-mobile');
+        addClass(heroTextClone, 'is-hidden-tablet');
+        mainBody.insertBefore(heroTextClone, theFirstChild);
+      }
+    }
+  }; // Advocacy form customization
+
+
+  var advocacyForm = function advocacyForm() {
+    wrapSelects();
+    setFieldTypes();
+    dynamicTextareas();
+  }; // Donation form customization
+
+
+  var donationForm = function donationForm() {
+    // form-row sometimes only has <script> or <style>
+    var htmlCaptions = getAll('.html-caption-container').filter(function (el) {
+      var childNodes = el.childNodes;
+      var nonTextNodes = 0;
+
+      for (var i = 0; i < childNodes.length; i++) {
+        if (childNodes[i].nodeType !== 3) {
+          nonTextNodes++;
+        }
+      }
+
+      return (el.innerHTML.indexOf('<\/script>') > -1 || el.innerHTML.indexOf('<\/style>') > -1) && nonTextNodes === 1;
+    }).forEach(function (el) {
+      var formRow = getClosestEl(el, '.form-row');
+
+      if (formRow) {
+        addClass(formRow, 'is-hidden');
+      }
+    });
+    wrapSelects();
+    setFieldTypes(); // Select labels
+
+    var selects = getAll('.select');
+
+    if (selects.length > 0) {
+      selects.forEach(function (el) {
+        var formRow = getClosestEl(el, '.form-row');
+
+        if (formRow) {
+          addClass(formRow, 'has-select');
+        }
+      });
+    } // Split date inputs
+
+
+    var dateInputs = getAll('.date-input-container > fieldset');
+
+    if (dateInputs.length > 0) {
+      dateInputs.forEach(function (el) {
+        var dateSelects = getAll('.select', el);
+
+        if (dateSelects.length > 0) {
+          var wrap = document.createElement('div');
+          addClass(wrap, 'select-group');
+          wrapAll(dateSelects, wrap);
+        }
+      });
+    } // Donation levels
+
+
+    var amountLabels = getAll('.donation-level-label-container');
+    var levelRadios = getAll('.donation-levels input[type="radio"]');
+    var levels = getAll('.donation-levels label');
+    var lastLevelButton = root.querySelector('.donation-level-container:last-child .donation-level-label-input-container > input') || null;
+    var otherAmount = root.querySelector('.donation-level-user-entered') || null;
+    var otherAmountInput = otherAmount ? otherAmount.querySelector('input') : null;
+
+    if (amountLabels.length > 0) {
+      amountLabels.forEach(function (el) {
+        var labelEl = getClosestEl(el, 'label');
+
+        if (labelEl) {
+          addClass(labelEl, 'has-label');
+        }
+      });
+    }
+
+    if (levelRadios.length > 0) {
+      var selectedLevel = levelRadios.filter(function (el) {
+        return el.checked;
+      });
+
+      if (selectedLevel.length === 1) {
+        var level = getClosestEl(selectedLevel[0], '.donation-level-input-container');
+
+        if (level) {
+          var label = level.querySelector('label');
+
+          if (label) {
+            activateEl(label);
+          }
+        }
+      }
+    }
+
+    if (levels.length > 0 && lastLevelButton && otherAmount && otherAmountInput) {
+      //otherAmountInput.setAttribute('placeholder', '30');
+      otherAmountInput.addEventListener('focus', function () {
+        deactivateEls(levels);
+        lastLevelButton.click();
+        activateEl(otherAmount);
+      });
+      otherAmountInput.addEventListener('blur', function () {
+        if (this.value === '') deactivateEl(otherAmount);
+      });
+      levels.forEach(function (level) {
+        level.addEventListener('click', function () {
+          deactivateEls(levels);
+          deactivateEl(otherAmount);
+          otherAmountInput.value = '';
+          toggleClass(this, activeClass);
+        });
+      });
+    } // Shipping fields
+
+
+    var shippingSame = document.getElementById('shipping_info_same_as_donorname');
+    var shippingFields = getAll('.form-row[id^="shipping_"]:not([id="shipping_info_same_as_donor_row"])');
+
+    if (shippingSame && shippingFields.length > 0) {
+      var wrap = document.createElement('div');
+      wrap.setAttribute('id', 'shippingFieldsWrap');
+      addClass(wrap, 'columns collapsible is-collapsed is-multiline');
+      wrapAll(shippingFields, wrap);
+      shippingSame.addEventListener('click', function () {
+        var shippingFieldsWrap = document.getElementById('shippingFieldsWrap');
+
+        if (this.checked) {
+          addClass(shippingFieldsWrap, 'is-collapsed');
+        } else {
+          removeClass(shippingFieldsWrap, 'is-collapsed');
+        }
+      });
+    } // Billing fields
+
+
+    var billingSame = document.getElementById('billing_info_same_as_donorname');
+    var billingFields = getAll('.form-row[id^="billing_"]:not([id="billing_info_same_as_donor_row"])');
+
+    if (billingSame && billingFields.length > 0) {
+      var _wrap = document.createElement('div');
+
+      _wrap.setAttribute('id', 'billingFieldsWrap');
+
+      addClass(_wrap, 'columns collapsible is-collapsed is-multiline');
+      wrapAll(billingFields, _wrap);
+      billingSame.addEventListener('click', function () {
+        var billingFieldsWrap = document.getElementById('billingFieldsWrap');
+
+        if (this.checked) {
+          addClass(billingFieldsWrap, 'is-collapsed');
+        } else {
+          removeClass(billingFieldsWrap, 'is-collapsed');
+        }
+      });
+    }
+  }; // Event form customization
+
+
+  var eventForm = function eventForm() {
+    var regCheckboxes = getAll('.cons-reg-value-checkbox input[type="checkbox"]');
+
+    if (regCheckboxes.length > 0) {
+      regCheckboxes.forEach(function (el) {
+        el.addEventListener('click', function () {
+          var fieldRow = getClosestEl(this, '.field-row');
+
+          if (fieldRow) {
+            if (this.checked) {
+              activateEl(fieldRow);
+            } else {
+              deactivateEl(fieldRow);
+            }
+          }
+        });
+      });
+    }
+
+    var labelMarkers = getAll('td').filter(function (el) {
+      return el.innerText === '*';
+    });
+    labelMarkers.forEach(function (el) {
+      var row = getClosestEl(el, 'tr');
+      var labelCol = el.nextElementSibling;
+      addClass(el, 'is-sr-only');
+
+      if (row && labelCol) {
+        var label = labelCol.querySelector('label');
+
+        if (!label) {
+          addClass(row, 'has-label');
+        }
+      }
+    });
+    var nbspRegEx = /^&nbsp;$/gm;
+    var nbspOnly = getAll('td[colspan="3"]').filter(function (el) {
+      return nbspRegEx.test(el.innerHTML);
+    });
+    nbspOnly.forEach(function (el) {
+      addClass(el, 'is-hidden');
+    });
+    wrapSelects();
+    setFieldTypes();
+  }; // Survey form customization
+
+
+  var surveyForm = function surveyForm() {
+    var submitButton = document.getElementById('ACTION_SUBMIT_SURVEY_RESPONSE');
+
+    if (submitButton) {
+      submitButton.value = 'Submit';
+    }
+
+    removeEmptyPs();
+    var fieldLabels = getAll('.Explicit');
+
+    if (fieldLabels.length > 0) {
+      var formHeadings = fieldLabels.filter(function (el) {
+        return el.textContent.indexOf('Information') > -1;
+      });
+
+      if (formHeadings.length > 0) {
+        formHeadings.forEach(function (el) {
+          addClass(el, 'form-heading');
+        });
+      }
+    }
+
+    var multiCheckboxes = getAll('input[type="checkbox"]:first-child:last-child');
+
+    if (multiCheckboxes.length > 0) {
+      multiCheckboxes.forEach(function (el) {
+        var row = getClosestEl(el, 'tr');
+
+        if (row) {
+          addClass(row, 'has-checkbox');
+          el.addEventListener('click', function () {
+            if (this.checked) {
+              activateEl(row);
+            } else {
+              deactivateEl(row);
+            }
+          });
+        }
+      });
+    }
+
+    var rememberMe = document.getElementById('s_rememberMe');
+
+    if (rememberMe) {
+      var rememberMeField = getClosestEl(rememberMe, 'tr');
+
+      if (rememberMeField) {
+        addClass(rememberMeField, 'is-hidden');
+      }
+    }
+
+    styleTextInputs();
+    wrapSelects();
+    styleCheckboxes();
+    setFieldTypes();
+  }; // Email preferences form customization
+
+
+  var emailPrefsForm = function emailPrefsForm() {
+    var iChangeEmailFormat = document.getElementById('IChangeEmailFormat');
+    var appArea = getClosestEl(IChangeEmailFormat, '.appArea');
+    var paddedListHeadings = getAll('.PaddedListHeadings');
+
+    if (appArea) {
+      var iUnsubscribeEmail = document.getElementById('IUnsubscribeEmail');
+
+      if (iUnsubscribeEmail) {
+        appArea.insertBefore(iUnsubscribeEmail, iChangeEmailFormat);
+      }
+    }
+
+    paddedListHeadings.forEach(function (el) {
+      el.textContent = el.textContent.replace(/Southern Poverty Law Center/, 'us');
+    });
+  }; // On Load
+
+
+  document.addEventListener('DOMContentLoaded', function () {
+    //setHeroContent();
+    // Make sure page is at least 100% height
+    window.addEventListener('resize', updatePageHeight);
+    updatePageHeight();
+    initStickyHeader(); //if (document.getElementById('action-alert')) advocacyForm();
+    //if (document.getElementById('ProcessForm')) donationForm();
+    //if (document.querySelector('.luminate-eventAppArea')) eventForm();
+
+    if (document.getElementById('SURVEY_ID')) surveyForm();
+    if (document.getElementById('IChangeEmailFormat')) emailPrefsForm();
+  }); // Functions
+
+  function debounce(func, wait, immediate) {
+    var timeout;
+    return function () {
+      var context = this,
+          args = arguments;
+
+      var later = function later() {
+        timeout = null;
+        if (!immediate) func.apply(context, args);
+      };
+
+      var callNow = immediate && !timeout;
+      clearTimeout(timeout);
+      timeout = setTimeout(later, wait);
+      if (callNow) func.apply(context, args);
+    };
+  }
+
+  var updatePageHeight = debounce(function () {
+    // Get the viewport height and multiple by 1% to get a value for a vh unit
+    var vh = window.innerHeight * 0.01; // Set the value of --vh custom property to the root of the document
+
+    document.documentElement.style.setProperty('--vh', vh + "px");
+  }, 250);
+
+  var getAll = function getAll(selector) {
+    var root = arguments.length > 1 && arguments[1] !== undefined ? arguments[1] : document;
+    return Array.prototype.slice.call(root.querySelectorAll(selector), 0);
+  };
+
+  var removeEmptyPs = function removeEmptyPs() {
+    document.querySelectorAll('p').forEach(function (el) {
+      return el.textContent.trim() === '' && !el.hasChildNodes() && el.parentNode.removeChild(el);
+    });
+  };
+
+  var styleTextInputs = function styleTextInputs() {
+    var textInputs = getAll('input[type="email"], input[type="number"], input[type="tel"], input[type="text"]');
+
+    if (textInputs.length > 0) {
+      textInputs.forEach(function (el) {
+        var field = getClosestEl(el, 'tr');
+
+        if (field) {
+          addClass(field, 'field');
+        }
+
+        addClass(el, 'input');
+      });
+    }
+  };
+
+  var setFieldTypes = function setFieldTypes() {
+    var textInputs = getAll('input[type="text"]');
+
+    if (textInputs.length > 0) {
+      // Email fields
+      textInputs.filter(function (el) {
+        return el.name.toLowerCase().indexOf('email') > -1;
+      }).forEach(function (input) {
+        input.type = 'email';
+      }); // Phone fields
+
+      textInputs.filter(function (el) {
+        return el.name.toLowerCase().indexOf('phone') > -1;
+      }).forEach(function (input) {
+        input.type = 'tel';
+      }); // Numeric fields
+
+      textInputs.filter(function (el) {
+        return el.name.toLowerCase().indexOf('amount') > -1 || el.name.toLowerCase().indexOf('gift_value') > -1;
+      }).forEach(function (input) {
+        input.setAttribute('inputmode', 'decimal');
+      });
+    }
+  };
+
+  var selectFilter = function selectFilter(el) {
+    return el.nodeName.toLowerCase() === 'select';
+  };
+
+  var wrapSelects = function wrapSelects() {
+    var selects = getAll('select');
+
+    if (selects.length > 0) {
+      selects.forEach(function (el) {
+        var selectSiblings = getSiblings(el, selectFilter);
+        var field = getClosestEl(el, 'tr');
+
+        if (field) {
+          addClass(field, 'field');
+        }
+
+        if (selectSiblings.length > 1) {
+          var _wrap2 = document.createElement('div');
+
+          addClass(_wrap2, 'select-group');
+          wrapAll(selectSiblings, _wrap2);
+        }
+
+        var wrap = document.createElement('div');
+        addClass(wrap, 'select');
+        wrapEl(el, wrap);
+      });
+    }
+  };
+
+  var styleCheckboxes = function styleCheckboxes() {
+    var checkboxes = getAll('input[type="checkbox"]');
+
+    if (checkboxes.length > 0) {
+      checkboxes.forEach(function (el) {
+        var field = getClosestEl(el, 'tr');
+
+        if (field) {
+          addClass(field, 'field checkbox');
+        }
+      });
+    }
+  };
+
+  function adjustHeight(el, minHeight) {
+    // compute the height difference which is caused by border and outline
+    var outerHeight = parseInt(window.getComputedStyle(el).height, 10);
+    var diff = outerHeight - el.clientHeight; // set the height to 0 in case of it has to be shrinked
+
+    el.style.height = 0; // set the correct height
+    // el.scrollHeight is the full height of the content, not just the visible part
+
+    el.style.height = Math.max(minHeight, el.scrollHeight + diff) + 'px';
+  }
+
+  var dynamicTextareas = function dynamicTextareas() {
+    var textAreas = getAll('textarea');
+
+    if (textAreas.length > 0) {
+      textAreas.forEach(function (el) {
+        el.style.boxSizing = el.style.mozBoxSizing = 'border-box';
+        el.style.overflowY = 'hidden';
+        var minHeight = el.scrollHeight;
+        adjustHeight(el, minHeight);
+        el.addEventListener('input', function () {
+          adjustHeight(el, minHeight);
+        });
+        window.addEventListener('resize', function () {
+          adjustHeight(el, minHeight);
+        });
+        adjustHeight(el, minHeight);
+      });
+    }
+  };
+
+  var getClosestEl = function getClosestEl(el, selector) {
+    var closestNode = el.closest(selector);
+    return closestNode ? closestNode : null;
+  };
+
+  var getSiblings = function getSiblings(el, filter) {
+    var sibs = [];
+    el = el.parentNode.firstChild;
+
+    do {
+      if (el.nodeType === 3) continue; // text node
+
+      if (!filter || filter(el)) sibs.push(el);
+    } while (el == el.nextSibling);
+
+    return sibs;
+  };
+
+  var wrapEl = function wrapEl(node, wrapper) {
+    node.parentNode.insertBefore(wrapper, node);
+    wrapper.appendChild(node);
+    return wrapper;
+  };
+
+  var wrapAll = function wrapAll(nodes, wrapper) {
+    var parent = nodes[0].parentNode;
+    var previousSibling = nodes[0].previousSibling;
+
+    for (var i = 0; nodes.length - i; wrapper.firstChild === nodes[0] && i++) {
+      wrapper.appendChild(nodes[i]);
+    }
+
+    var nextSibling = previousSibling ? previousSibling.nextSibling : parent.firstChild;
+    parent.insertBefore(wrapper, nextSibling);
+    return wrapper;
+  };
+
+  var hasClass = function hasClass(el, cls) {
+    return el.className.match(new RegExp('(\\s|^)' + cls + '(\\s|$)'));
+  };
+
+  var clearClass = function clearClass(el) {
+    return el.className = '';
+  };
+
+  var addClass = function addClass(el, cls) {
+    if (!hasClass(el, cls)) el.className += ' ' + cls;
+  };
+
+  var removeClass = function removeClass(el, cls) {
+    if (hasClass(el, cls)) {
+      var reg = new RegExp('(\\s|^)' + cls + '(\\s|$)');
+      el.className = el.className.replace(reg, ' ');
+    }
+  };
+
+  var toggleClass = function toggleClass(el, cls) {
+    if (hasClass(el, cls)) {
+      removeClass(el, cls);
+    } else {
+      addClass(el, cls);
+    }
+  };
+
+  var activateEl = function activateEl(el) {
+    addClass(el, activeClass);
+  };
+
+  var deactivateEl = function deactivateEl(el) {
+    removeClass(el, activeClass);
+  };
+
+  var activateEls = function activateEls(els) {
+    if (els.length > 0) {
+      els.forEach(function (el) {
+        activateEl(el);
+      });
+    }
+  };
+
+  var deactivateEls = function deactivateEls(els) {
+    if (els.length > 0) {
+      els.forEach(function (el) {
+        deactivateEl(el);
+      });
+    }
+  };
+
+  var focusEl = function focusEl(el) {
+    setTimeout(function (el) {
+      el.focus();
+    }, 100);
+  };
+})();
+</script>

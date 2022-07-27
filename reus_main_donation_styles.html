@@ -1,0 +1,775 @@
+<style>
+/**** Luminate Overrides ****/
+div.responsive span.header-warning-message {
+  display: none;
+}
+.donation-form-content:not(:last-child) {
+  margin-bottom: 0;
+}
+div.form-row, #level_flexible_row, .payment-type-element-container, .button-container {
+    flex: 1 1 100%;
+}
+div.responsive a.next-step,
+div.responsive button.next-step,
+div.responsive a.previous-step,
+div.responsive button.previous-step,
+div.responsive a.finish-step,
+div.responsive button.finish-step {
+  float: none;
+}
+
+div.responsive span.field-required, div.responsive div.ErrorMessage.page-error>span.field-error-indicator {
+  display: none;
+}
+
+* {
+  font-family: Knockout\ 28 A,Knockout\ 28 B,Arial,sans-serif;
+}
+
+.cvv-input .HelpLink {
+  display: none;
+}
+
+div.form-row div.form-content>select, div.form-row div.form-content>input[type="text"], div.form-row div.form-content input.ui-autocomplete-input, div.form-row div.form-content>textarea, div.form-row div.form-content>button {
+  margin-top: 0;
+}
+
+.form-selectlist LABEL.FormLabel {
+  display: none;
+}
+
+/**** Layout ****/
+.main {
+  padding: 0;
+}
+.container {
+  max-width: 100%;
+}
+
+#header .container {
+  max-width: 65.25em;
+}
+
+#main .container {padding-top: 0.75rem}
+
+@media screen and (max-width: 479px) {
+  .container {
+      padding: 0;
+  }
+  #main .container {padding-top: 0.75rem}
+}
+
+@media screen and (max-width: 767px) {
+  .mobile div.donation-form-container.responsive {
+    padding-bottom: 0;
+  }
+}
+
+/**** Header ****/
+.header+section {
+  margin-top: 0;
+}
+
+@media screen and (max-width: 1024px) {
+  .hero {
+    margin-top: 85px !important;
+  }
+}
+@media screen and (max-width: 479px) {
+  .hero {
+    margin-top: 4rem !important;
+  }
+}
+
+/**** Donation Steps ****/
+.donation-steps {
+  display: flex;
+  max-width: 400px;
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  justify-content: space-between;
+}
+
+.donation-steps li {
+  color: white;
+  padding: 5px 30px;
+  text-transform: uppercase;
+  background: #999999;
+  font-family: Knockout\ 28 A,Knockout\ 28 B,Arial,sans-serif;
+  font-size: 1.25rem;
+  line-height: 1.2;
+}
+
+.donation-steps li.active {
+  color: black;
+  background: #f0b21c;
+}
+
+@media only screen and (max-width: 767px) {
+  .mobile div.html-caption-container {
+    width: 100%;
+  }
+}
+
+
+/**** Content ****/
+.form-row h2 {
+  font-size: 3rem;
+  text-transform: uppercase;
+}
+.form-row h3, .donation-level-container-generic-repeat .donation-section-label {
+  font-size: 2.5rem;
+  text-transform: uppercase;
+}
+.form-row .html-caption-container p {
+  max-width: 600px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+/**** Donation Levels ****/
+div.form-donation-level .FormLabelText, div.donation-level-label-input-container {
+  display: none;
+}
+
+div.donation-level-container {
+  border-radius: 0;
+}
+
+.donation-level-container label, .donation-type-button-container label, .donation-level-container .donation-level-user-entered input[type="text"] {
+  color: #4a4a4a;
+  padding: 5px 30px;
+  text-transform: uppercase;
+  border: 2px solid #4a4a4a;
+  font-family: Knockout\ 28 A,Knockout\ 28 B,Arial,sans-serif;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  height: auto;
+  transition: all .3s ease;
+  cursor: pointer;
+}
+
+.donation-level-container .donation-level-user-entered input[type="text"] {
+  text-align: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+.donation-level-container label.is-selected, .donation-type-button-container label:hover, .donation-type-button-container label.is-selected {
+  color: white;
+  background-color: #9c3022;
+  border-color: #9c3022;
+}
+
+.don-standard-levels .donation-level-user-entered {
+  margin-top: -9999px;
+}
+
+div.donation-level-user-entered {
+  margin-top: 0;
+}
+
+.donation-level-user-entered label {
+  display: none;
+}
+
+div.donation-level-input-container {
+  padding: 0;
+}
+
+div.donation-level-container>div.form-content {
+  margin: 0;
+}
+
+@media only screen and (max-width: 479px) {
+  .donation-levels {
+    display: flex;
+    flex-flow: wrap;
+  }
+  .donation-level-container {
+    flex: 0 0 50%;
+  }
+  .donation-level-container:last-child {
+    flex-basis: 100%;
+  }
+  .mobile div.responsive div.form-content {
+    margin-top: 0;
+    margin-bottom: 0;
+  }
+}
+
+/**** Donation Type ****/
+div.generic-repeat-label-checkbox-container {
+  display: none;
+}
+
+.donation-type-container {
+  display: inline-block;
+}
+
+.donation-type {
+  display: flex;
+  justify-content: center;
+}
+
+.donation-type-button-container {
+  display: block;
+  flex-basis: 0;
+  flex-grow: 1;
+  flex-shrink: 1;
+  padding: .75rem;
+}
+
+@media screen and (max-width: 479px) {
+  .donation-type {
+    flex-direction: column;
+  }
+  .donation-type-button-container {
+    padding: 1.25rem .75rem;
+  }
+}
+
+/**** Payment ****/
+#payment_cc_container h3, #responsive_payment_typecc_type_row {
+  display: none;
+}
+.payment-type-element-container {
+  background-color: #EBEBEB;
+}
+div.payment-field-container {
+    max-width: 720px;
+    margin-left: auto;
+    margin-right: auto
+}
+
+/**** Tribute Details ****/
+.tribute-information-container {
+  margin-bottom: 1.5rem;
+}
+
+#tribute_show_honor_fields_row input{
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+#tribute_show_honor_fields_row label{
+  font-size: 1.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+/**** Billing Details ****/
+.tribute-information-container, .donor-information-container {
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 720px;
+  width: 100%;
+  display: flex;
+  flex-flow: wrap;
+}
+
+.tribute-information-container div.form-row div.form-content, .donor-information-container div.form-row div.form-content {
+  display: block;
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
+.tribute-information-container div.form-row, .donor-information-container div.form-row {
+  flex: 0 0 0;
+  padding: .25rem .75rem;
+}
+
+.donor-information-container div.form-row input[type="text"],
+.donor-information-container div.form-row input[type="email"],
+.donor-information-container div.form-row input[type="tel"],
+#billing_first_name_row input,
+#billing_last_name_row input,
+#billing_addr_street1_row input,
+#billing_addr_street2_row input,
+#billing_addr_street3_row input,
+#billing_addr_city_row input,
+#billing_addr_zip_row input,
+#billing_addr_state_row select,
+#billing_addr_country_row select,
+#tribute_type_row select,
+#tribute_honoree_first_name_row input,
+#tribute_honoree_last_name_row input,
+#tribute_notify_recip_name_row input,
+#tribute_notify_recip_street1_row input,
+#tribute_notify_recip_street2_row input,
+#tribute_notify_recip_city_row input,
+#tribute_notify_recip_state_row select,
+#tribute_notify_recip_zip_row input,
+#tribute_notify_recip_country_row select,
+#tribute_message_body_row textarea,
+#tribute_signature_row input,
+#donor_phone_row input,
+#donor_email_address_row input,
+.donor-information-container div.form-row select {
+  width: 100%;
+}
+
+
+.donor-information-container #billing_first_name_row,
+.donor-information-container #billing_last_name_row,
+.tribute-information-container #tribute_honoree_first_name_row,
+.tribute-information-container #tribute_honoree_last_name_row,
+.tribute-information-container #tribute_signature_row {
+  flex-basis: 50%;
+}
+
+.tribute-information-container #tribute_type_row {
+  flex-basis: 50%;
+  margin-right: 10px!important;
+
+}
+
+.donor-information-container #billing_title_row {
+  flex-basis: 20%;
+}
+
+.donor-information-container #billing_addr_street1_row,
+.donor-information-container #billing_addr_street2_row,
+.donor-information-container #billing_addr_country_row,
+.donor-information-container #donor_phone_row,
+.donor-information-container #donor_email_address_row,
+.tribute-information-container #tribute_notify_recip_name_row,
+.tribute-information-container #tribute_notify_recip_street1_row,
+.tribute-information-container #tribute_notify_recip_street2_row,
+.tribute-information-container #tribute_notify_recip_country_row,
+.tribute-information-container #tribute_message_body_row {
+  flex-basis: 100%;
+}
+
+.donor-information-container #billing_addr_city_row,
+.donor-information-container #billing_addr_zip_row,
+.tribute-information-container #tribute_notify_recip_city_row,
+.tribute-information-container #tribute_notify_recip_zip_row {
+  flex-basis: 33%;
+}
+
+.donor-information-container #billing_addr_state_row,
+.tribute-information-container #tribute_notify_recip_state_row {
+  flex-basis: 34%;
+}
+
+#donor_email_opt_in_Row, #donor_remember_me_row {
+  display: none;
+}
+
+@media screen and (max-width: 767px) {
+  .donor-information-container #billing_title_row,
+  .donor-information-container #billing_first_name_row,
+  .donor-information-container #billing_last_name_row,
+  .donor-information-container #billing_addr_city_row,
+  .donor-information-container #billing_addr_state_row,
+  .donor-information-container #billing_addr_zip_row,
+  .donor-information-container #billing_addr_street1_row,
+  .donor-information-container #billing_addr_street2_row,
+  .donor-information-container #billing_addr_country_row,
+  .donor-information-container #donor_phone_row,
+  .donor-information-container #donor_email_address_row,
+  .tribute-information-container #tribute_type_row,
+  .tribute-information-container #tribute_honoree_first_name_row,
+  .tribute-information-container #tribute_honoree_last_name_row,
+  .tribute-information-container #tribute_notify_recip_name_row,
+  .tribute-information-container #tribute_notify_recip_street1_row,
+  .tribute-information-container #tribute_notify_recip_street2_row,
+  .tribute-information-container #tribute_notify_recip_city_row,
+  .tribute-information-container #tribute_notify_recip_state_row,
+  .tribute-information-container #tribute_notify_recip_zip_row,
+  .tribute-information-container #tribute_message_body_row,
+  .tribute-information-container #tribute_signature_row {
+    flex-basis: 100%;
+  }
+
+  .mobile #billing_first_name_row input,
+  .mobile #billing_last_name_row input,
+  .mobile #billing_addr_street1_row input,
+  .mobile #billing_addr_street2_row input,
+  .mobile #billing_addr_street3_row input,
+  .mobile #billing_addr_city_row input,
+  .mobile #billing_addr_zip_row input,
+  .mobile #billing_addr_state_row select,
+  .mobile #billing_addr_country_row select,
+  .mobile #donor_phone_row input,
+  .mobile #donor_email_address_row input,
+  .mobile #tribute_type_row select,
+  .mobile #tribute_honoree_first_name_row input,
+  .mobile #tribute_honoree_last_name_row input,
+  .mobile #tribute_notify_recip_name_row input,
+  .mobile #tribute_notify_recip_street1_row input,
+  .mobile #tribute_notify_recip_street2_row input,
+  .mobile #tribute_notify_recip_city_row input,
+  .mobile #tribute_notify_recip_state_row select,
+  .mobile #tribute_notify_recip_zip_row input,
+  .mobile #tribute_notify_recip_country_row select,
+  .mobile #tribute_message_body_row textarea,
+  .mobile #tribute_signature_row input {
+    max-width: 100%;
+    width: 100%;
+  }
+
+}
+
+/**** Inputs ****/
+div.responsive input[type="text"], div.responsive input[type="email"], div.responsive input[type="tel"], div.responsive select, div.responsive textarea {
+  background-color: #fff;
+  border: 2px solid #999999;
+  transition: all .3s ease;
+  border-radius: 0;
+  box-shadow: none;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  height: auto;
+  padding: 5px 7px;
+}
+
+div.responsive select {
+  padding: 4px 7px;
+}
+
+#responsive_payment_typecc_number_row div.form-content, #responsive_payment_typecc_exp_date_row div.form-content, #responsive_payment_typecc_cvv_row div.form-content {
+  margin:0;
+  display: block;
+}
+
+#responsive_payment_typecc_exp_date_row {
+  width: 60%;
+  float: left;
+}
+#responsive_payment_typecc_exp_date_row select {
+  width: 45%;
+}
+
+#responsive_payment_typecc_exp_date_row select#responsive_payment_typecc_exp_date_MONTH {
+  float: left;
+}
+#responsive_payment_typecc_exp_date_row select#responsive_payment_typecc_exp_date_YEAR {
+  float: right;
+}
+
+#responsive_payment_typecc_cvv_row {
+  width: 37%;
+  float: right;
+}
+
+#responsive_payment_typecc_exp_date_row, #responsive_payment_typecc_cvv_row {
+  display: inline-block;
+  vertical-align: middle;
+}
+
+div.payment-field-container #responsive_payment_typecc_number_row input, div.payment-field-container #responsive_payment_typecc_cvv_row input {
+  width: 100%;
+}
+
+/**** Ecard ****/
+#tribute_ecard_subject_row, #tribute_ecard_message_row {
+  width: 100%;
+  flex: none;
+}
+
+#tribute_ecard_messagename {
+  max-width: none;
+  width: 100%;
+}
+
+#tribute_ecard_subjectname {
+  min-width: 50%;
+}
+
+.ecard-information-container {
+  margin-bottom: 1.5rem;
+  width: 100%;
+}
+
+.ecard-information-container .container {
+  margin-left: auto !important;
+  margin-right: auto !important;
+  max-width: 720px;
+  width: 100%;
+}
+
+.ecard-information-container .form-content {
+  width: 100%
+}
+
+.ecard-information-container .check-box-form-label-text {
+  display: none;
+}
+
+div#send_ecard_row,
+div#ecard_recpients_row,
+div#select_grid_row {
+  margin-top: -.75rem !important;
+}
+
+div#preview_button_row,
+div#e_card_copy_sender_row {
+  margin-top: -1.5rem !important;
+}
+
+#send_ecardname,
+#e_card_copy_sendername {
+  margin-right: 0.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+label[for="send_ecardname"],
+label[for="select_gridname"],
+label[for="e_card_copy_sendername"] {
+  cursor: pointer;
+  font-size: 1.5rem;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+label[for="ecard_recpientsname"] {
+  border: none!important;
+  clip: rect(0,0,0,0)!important;
+  height: .01em!important;
+  overflow: hidden!important;
+  padding: 0!important;
+  position: absolute!important;
+  white-space: nowrap!important;
+  width: .01em!important;
+}
+
+#ecard_recpientsname {
+  max-width: none;
+  width: 100%;
+}
+
+.layout-chooser-container {
+  display: flex;
+  flex-wrap: wrap;
+  margin-left: -.75rem;
+  margin-right: -.75rem;
+}
+
+div.responsive div.layout-choice-thumbnail-container {
+  flex: none;
+  margin: 0;
+  padding: .75rem;
+  width: 50%;
+}
+
+@media screen and (min-width: 600px) {
+  div.responsive div.layout-choice-thumbnail-container {
+    width: 25%;
+  }
+}
+
+.layout-choice-thumbnail-label {
+  cursor: pointer;
+}
+
+div.responsive div.layout-choice-thumbnail-container img {
+  width: 100%;
+}
+
+div.donation-form-container.responsive .ecard-information-container input[type=radio] {
+  height: auto !important;
+  position: static !important;
+  width: auto !important;
+}
+
+div.responsive button.action-button[value="eCard Preview"] {
+  background: #fff;
+  border: 2px solid #4a4a4a;
+  border-radius: 0;
+  color: #4a4a4a;
+  cursor: pointer;
+  font-family: Knockout\ 28 A,Knockout\ 28 B,Arial,sans-serif;
+  font-size: 1.375rem;
+  line-height: 1.2;
+  height: auto;
+  margin: auto !important;
+  max-width: 100%;
+  padding: 5px 30px;
+  text-transform: uppercase;
+  transition: all .3s ease;
+  white-space: nowrap;
+}
+
+div.responsive button.action-button[value="eCard Preview"]:hover {
+  color: white;
+  background-color: #9c3022;
+  border-color: #9c3022;
+}
+
+/**** Buttons ****/
+div.button-container {
+  border-top: none;
+  margin-top: 0;
+  padding-bottom: 30px;
+}
+.luminate-form1 div.button-container {
+  background-color: #EBEBEB;
+}
+div.responsive a.next-step, div.responsive button.next-step,
+div.responsive a.finish-step, div.responsive button.finish-step {
+  font-size: 2.25rem;
+  border: none;
+  border-radius: 0;
+  background-image: none;
+  background-color: #D22B30;
+  color: white;
+  text-transform: uppercase;
+  max-width: 100%;
+  width: 320px;
+  transition: all .3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.responsive a.next-step:hover, div.responsive button.next-step:hover,
+div.responsive a.next-step:active, div.responsive button.next-step:active,
+div.responsive a.next-step:visited,
+div.responsive a.finish-step:hover, div.responsive button.finish-step:hover,
+div.responsive a.finish-step:active, div.responsive button.finish-step:active,
+div.responsive a.finish-step:visited {
+  background-color: #9c3022;
+  background-image: none;
+}
+
+div.responsive a.previous-step, div.responsive button.previous-step {
+  font-size: 1.5rem;
+  border: none;
+  border-radius: 0;
+  background-image: none;
+  background-color: #575757;
+  color: white;
+  text-transform: uppercase;
+  max-width: 100%;
+  width: 320px;
+  padding: 5px;
+  transition: all .3s ease;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+div.responsive a.previous-step:hover, div.responsive button.previous-step:hover,
+div.responsive a.previous-step:active, div.responsive button.previous-step:active,
+div.responsive a.previous-step:visited {
+  background-color: #4A4A4A;
+  background-image: none;
+}
+
+/*@media only screen and (max-width: 767px) {
+  .mobile div.responsive button.step-button {
+    width: 220px;
+    max-width: 220px;
+    float: none;
+  }
+}*/
+
+/**** Post-action Content ****/
+.post-action-content {
+  min-height: 100vh;
+}
+
+
+/**** Loading ****/
+.loading-overlay {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: white;
+  z-index: 100000;
+}
+.lds-ripple {
+  display: block;
+  position: relative;
+  width: 80px;
+  height: 80px;
+  margin: 0;
+  top: 50%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+.lds-ripple div {
+  position: absolute;
+  border: 4px solid #000;
+  opacity: 1;
+  border-radius: 50%;
+  animation: lds-ripple 1s cubic-bezier(0, 0.2, 0.8, 1) infinite;
+}
+.lds-ripple div:nth-child(2) {
+  animation-delay: -0.5s;
+}
+@keyframes lds-ripple {
+  0% {
+    top: 36px;
+    left: 36px;
+    width: 0;
+    height: 0;
+    opacity: 1;
+  }
+  100% {
+    top: 0px;
+    left: 0px;
+    width: 72px;
+    height: 72px;
+    opacity: 0;
+  }
+}
+
+/****  Bank Account Payment Styles  ****/
+
+ul.radio-array-list {
+    display: flex;
+    justify-content: center;
+}
+
+ul.radio-array-list li {
+    display: block;
+    flex-basis: 0;
+    flex-grow: 1;
+    flex-shrink: 1;
+    padding: .75rem;
+}
+
+ul.radio-array-list li label {
+    color: #4a4a4a;
+    padding: 5px 30px;
+    text-transform: uppercase;
+    border: 2px solid #4a4a4a;
+    font-family: Knockout\ 28 A,Knockout\ 28 B,Arial,sans-serif;
+    font-size: 1.375rem;
+    line-height: 1.2;
+    height: auto;
+    transition: all .3s ease;
+    cursor: pointer;
+    background-color: #fff
+}
+
+ul.radio-array-list li input[type="radio"]:checked + span label {
+    color: white;
+    background-color: #9c3022;
+    border-color: #9c3022;
+}
+
+#responsive_payment_typeach_confirm_row > .form-content {
+    display: flex;
+    justify-content: center;
+}
+
+#responsive_payment_typeach_confirm_row > .form-content input {
+    margin-top:0.7rem;
+    margin-right: 0.5rem;
+}
+
+#responsive_payment_typeach_confirm_row > .form-content label {
+    font-size: 1.5rem;
+    text-align:left
+}
+</style>

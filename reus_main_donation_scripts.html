@@ -1,0 +1,254 @@
+<div class="loading-overlay"><div class="lds-ripple"><div></div><div></div></div></div>
+<script>
+  (function(){
+    document.querySelector('.loading-overlay').classList.add('hiddenObj');
+  })();
+</script>
+<script type="text/javascript">
+Y.use("jquery-ui", function(Y) {
+  jQuery(document).ready(function($) {
+    // $('.loading-overlay').hide();
+    $('form').addClass('luminate-'+$('input[name*=".donation"]').val());
+    $(window).scrollTop(0);
+    $('.offset-background-element').closest('.form-row').addClass('payment-type-element-container');
+    $('.custom-field-container').each(function() {
+      $(this).attr('id', $(this).find('input,select,textarea').filter(':first').attr('name').replace(/_radio$|_select$|_input$|_checkbox$|_dropdown$/, '_row'));
+    });
+    $('input[type="text"], input[type="email"], input[type="tel"], textarea').each(function(index, element) {
+      if($(element).attr('id').length && $('label[for="'+$(element).attr('id')+'"]').length) {
+        $(element).attr('placeholder', $.trim($('label[for="'+$(element).attr('id')+'"]').text()).replace(/:$/,''));
+      }
+    });
+    $('select').each(function(index, element) {
+      if($(element).attr('id').length && $('label[for="'+$(element).attr('id')+'"]').length) {
+        if($(element).find('option:first').val() == "") {
+          $(element).find('option:first').text($.trim($('label[for="'+$(element).attr('id')+'"]').text()).replace(/:$/,''));
+        }
+      }
+    });
+    $('.donation-level-user-entered input[type="text"]').attr('placeholder', 'Other');
+    $('input[name="level_standardexpanded"],input[name="level_foreverexpanded"]').change(function(ev) {
+      $('.donation-level-container label.is-selected').removeClass('is-selected');
+      $(this).closest('.donation-level-container').find('label').addClass('is-selected');
+      console.log($('input[name="level_standardexpanded"]:checked,input[name="level_foreverexpanded"]:checked').val());
+    });
+    $('input[name="level_standardexpanded"]:checked,input[name="level_foreverexpanded"]:checked').change();
+    if($('.donation-level-container-generic-repeat').length) {
+
+      $('.donation-level-container-generic-repeat').append('<div class="donation-type-container"><div class="donation-type"><div class="donation-type-button-container"><a data-gift-type="monthly" href="[[S80:monthly_form_url]]" target="_blank">Give&nbsp;monthly</a></div><div class="donation-type-button-container"><a href="#" data-gift-type="onetime" class="is-selected">One-time&nbsp;gift</a></div></div></div>');
+
+      $('.donation-type-button-container a').click(function(ev) {
+        //counterintuitively set the checkbox to the opposite of what we want so we can trigger a click event in case Luminate needs that event to occur to properly setup the transaction for the desired gift type
+        //if($(this).data('gift-type') == 'monthly') {
+          //$('#level_standardauto_repeatname').prop('checked', false).click();
+
+        //}
+        if($(this).data('gift-type') == 'onetime') {
+          ev.preventDefault();
+          //$('#level_standardauto_repeatname').prop('checked', true).click();
+        }
+
+        //$('.donation-type-button-container label').removeClass('is-selected');
+        //$(this).addClass('is-selected');
+      });
+      $('#level_standardauto_repeatname').prop('checked', true).click().prop('disabled', true);
+      /*if($('#level_standardauto_repeatname').prop('checked') == true) {
+        $('.donation-type-button-container label[data-gift-type="monthly"]').click();
+      } else {
+        $('.donation-type-button-container label[data-gift-type="onetime"]').click();
+      }*/
+    }
+
+    if($('.donation-level-container-generic-repeat').length) {
+      $('.donation-level-container-generic-repeat').insertBefore($('.don-standard-levels.form-row'));
+    }
+
+    jQuery('#billing_info_same_as_donorname').unbind('click')
+    jQuery('#billing_info_same_as_donorname').click(function() {
+      if (jQuery(this).prop('checked')) {
+        copySrcNameElement ('donor_addr_street1', '', 'billing_addr_street1');
+        copySrcNameElement ('donor_addr_street2', '', 'billing_addr_street2');
+        copySrcNameElement ('donor_addr_city', '', 'billing_addr_city');
+        copySrcElement ('donor_addr_state', '', 'billing_addr_state');
+        copySrcNameElement ('donor_addr_zip', '', 'billing_addr_zip');
+        copySrcElement ('donor_addr_country', '', 'billing_addr_country');
+        copySrcElement ('donor_title', '', 'billing_title');
+        copySrcNameElement ('donor_first_name', '', 'billing_first_name');
+        copySrcNameElement ('donor_middle_name', '', 'billing_middle_name');
+        copySrcNameElement ('donor_last_name', '', 'billing_last_name');
+        copySrcElement ('donor_suffix', '', 'billing_suffix');
+        copySrcElement ('donor_prof_suffix', '', 'billing_prof_suffix');
+        copySrcNameElement ('donor_email_address', '', 'billing_email_address');
+        copySrcNameElement ('donor_phone', '', 'billing_phone');
+        copySrcNameElement ('donor_addr_street3', '', 'billing_addr_street3');
+        copySrcNameElement ('donor_addr_county', '', 'billing_addr_county');
+        copySrcNameElement ('donor_addr_postcode', '', 'billing_addr_postcode');
+      }
+      else {
+        clearDestinationNameElement ('billing_addr_street1');
+        clearDestinationNameElement ('billing_addr_street2');
+        clearDestinationNameElement ('billing_addr_city');
+        clearDestinationElement ('billing_addr_state');
+        clearDestinationNameElement ('billing_addr_zip');
+        clearDestinationElement ('billing_addr_country');
+        clearDestinationElement ('billing_title');
+        clearDestinationNameElement ('billing_first_name');
+        clearDestinationNameElement ('billing_middle_name');
+        clearDestinationNameElement ('billing_last_name');
+        clearDestinationElement ('billing_suffix');
+        clearDestinationElement ('billing_prof_suffix');
+        clearDestinationNameElement ('billing_email_address');
+        clearDestinationNameElement ('billing_phone');
+        clearDestinationNameElement ('billing_addr_street3');
+        clearDestinationNameElement ('billing_addr_county');
+        clearDestinationNameElement ('billing_addr_postcode');
+      }
+    })
+
+    function copySrcNameElement (source, previousPageValue, destination) {
+      copySrcElement (source + "name", previousPageValue, destination + "name");
+    }
+    function copySrcElement (source, previousPageValue, destination) {
+      if (previousPageValue !== '') {
+        jQuery('#' + destination).val(previousPageValue);
+      } else if (jQuery('#' + source).val() != undefined) {
+        jQuery('#' + destination).val(jQuery('#' + source).val());
+      }
+    }
+    function clearDestinationNameElement(destination) {
+      clearDestinationElement (destination + "name");
+    }
+    function clearDestinationElement(destination) {
+      jQuery('#' + destination).val("");
+    }
+
+    var donorSelectors = "#donor_title_row,#donor_first_name_row, #donor_last_name_row,#donor_addr_street1_row,#donor_addr_street2_row,#donor_addr_street3_row,#donor_addr_city_row,#donor_addr_zip_row,#donor_addr_state_row,#donor_addr_country_row";
+    var billingSelectors = "#billing_title_row,#billing_first_name_row, #billing_last_name_row,#billing_addr_street1_row,#billing_addr_street2_row,#billing_addr_street3_row,#billing_addr_city_row,#billing_addr_zip_row,#billing_addr_state_row,#billing_addr_country_row";
+
+
+
+    if($('#billing_info_same_as_donor_row').length) {
+      $(donorSelectors).find('input, select, textarea').change(function(ev) {
+        if($('#billing_info_same_as_donorname').prop("checked")) {
+          console.log($(this).val(), $('#' + $(this).attr('id').replace(/^donor_/, 'billing_')).val());
+          copySrcElement($(this).attr('name'), '', $(this).attr('name').replace(/^donor_/, 'billing_'));
+          console.log($(this).val(), $('#' + $(this).attr('id').replace(/^donor_/, 'billing_')).val());
+        }
+      })
+
+
+      $('#billing_info_same_as_donor_row input[name="billing_info_same_as_donorname"]').change(function() {
+        if($(this).is(':checked')) {
+          $(billingSelectors).hide();
+        } else {
+          $(billingSelectors).show();
+        }
+      }).change();
+    }
+
+    var ecardSelectors = "#ecard_recpients_row, #select_grid_row, #tribute_ecard_subject_row, #tribute_ecard_message_row, #preview_button_row, #e_card_copy_sender_row";
+    var printCardSelectors = "#tribute_notify_recip_name_row, #tribute_notify_recip_street1_row, #tribute_notify_recip_street2_row, #tribute_notify_recip_city_row, #tribute_notify_recip_state_row, #tribute_notify_recip_zip_row, #tribute_notify_recip_country_row, #tribute_ecard_message_row, #tribute_signature_row, #message_include_gift_amount_row";
+    var printCardValidators = "#tribute_notify_recip_namesubmit, #tribute_notify_recip_street1submit, #tribute_notify_recip_street2submit, #tribute_notify_recip_citysubmit, #tribute_notify_recip_statesubmit, #tribute_notify_recip_zipsubmit, #tribute_notify_recip_countrysubmit, #tribute_signaturesubmit, #message_include_gift_amountsubmit";
+    var updateSubmitFields = function(selectors, enable) {
+      $(selectors).each(function() {
+        if(enable) {
+          $(this).attr('name', $(this).attr('id'));
+        } else {
+          $(this).attr('name', $(this).attr('id')+'_skip');
+        }
+      })
+    }
+
+    if($('#tribute_show_honor_fields_row').length) {
+      var target = $('#tribute_show_honor_fields_row');
+      $('#tribute_show_honor_fields_row').addClass('display-input-label');
+      if($('.js-tribute-title').length) {
+        target = $('.js-tribute-title').closest('.form-row');
+      }
+      target.after('<div class="tribute-information-container"></div>');
+      $('.form-row[id^="tribute_"], #send_ecard_row, #ecard_recpients_row, #select_grid_row, #preview_button_row, #e_card_copy_sender_row, #message_include_gift_amount_row').not('#tribute_show_honor_fields_row').each(function(index, element) {
+        $('.tribute-information-container').append($(this));
+      });
+    }
+
+    $('#tribute_show_honor_fieldsname').change(function(e) {
+      if ($(this).is(':checked')) {
+        $('.tribute-information-container').show();
+      } else {
+        $('.tribute-information-container').hide();
+      }
+    });
+
+    $('input[name="tribute_card_type_radio"]').change(function(ev) {
+      $('#tribute_card_type_row .is-selected').removeClass('is-selected');
+      var checked = $('input[name="tribute_card_type_radio"]').filter(':checked');
+      checked.closest('.radio-button-container').find('label').addClass('is-selected');
+      console.log(checked, checked.val());
+      switch(checked.val()) {
+        case 'ecard':
+          if($('[name="send_ecardname"]').length) {
+            $('[name="send_ecardname"]').prop('checked', true);
+            fire_obs_comp_event('send_ecard', $('[name="send_ecardname"]')[0]);
+          }
+          $('[name="mail_inhidden"]').val('false');
+          $('[name="ecard_no_card_hidden"]').val('false');
+          $(printCardSelectors).hide();
+          updateSubmitFields(printCardValidators, false);
+          $(ecardSelectors).show();
+        break;
+        case 'print_card':
+          if($('[name="send_ecardname"]').length) {
+            $('[name="send_ecardname"]').prop('checked', false);
+            fire_obs_comp_event('send_ecard', $('[name="send_ecardname"]')[0]);
+          }
+          $('[name="mail_inhidden"]').val('true');
+          $('[name="ecard_no_card_hidden"]').val('false');
+          $(ecardSelectors).hide();
+          updateSubmitFields(printCardValidators, true);
+          $(printCardSelectors).show();
+        break;
+        default:
+          if($('[name="send_ecardname"]').length) {
+            $('[name="send_ecardname"]').prop('checked', false);
+            fire_obs_comp_event('send_ecard', $('[name="send_ecardname"]')[0]);
+          }
+          $('[name="mail_inhidden"]').val('false');
+          $('[name="ecard_no_card_hidden"]').val('true');
+          $(ecardSelectors).hide();
+          $(printCardSelectors).hide();
+          updateSubmitFields(printCardValidators, false);
+
+        break;
+      }
+    });
+    if($('input[name="tribute_card_type_radio"]:checked').length === 0) {
+      $('input[name="tribute_card_type_radio"][value="no_card"]').prop('checked', true)
+    }
+    console.log($('input[name="tribute_card_type_radio"]:checked'));
+    $('input[name="tribute_card_type_radio"]:checked').change();
+
+    if($('.js-tribute-title').length) {
+      $('#tribute_show_honor_fieldsname').change(function(ev) {
+        if($('#tribute_show_honor_fieldsname').is(':checked')) {
+          $('.js-tribute-title').closest('.form-row').show();
+          $('input[name="tribute_card_type_radio"]:checked').change();
+          $('#tribute_card_type_row').show();
+        } else {
+          $('.js-tribute-title').closest('.form-row').hide();
+          $('#tribute_card_type_row').hide();
+          $('#send_ecardname, #e_card_copy_sendername').prop('checked', false).trigger('change');
+          $('#ecard_recpientsname').val('');
+        }
+      });
+      $('#tribute_show_honor_fieldsname').trigger('change');
+    }
+
+    if($('form').hasClass('luminate-form2')) {
+      $('.button-container').before('<div class="donor-information-container"></div>');
+      $('.form-selectlist, .form-text, .form-checkbox').each(function(index, element) {
+        $('.donor-information-container').append($(this));
+      });
+    }
+  });
+});
+</script>
